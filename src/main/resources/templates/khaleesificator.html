@@ -1,0 +1,10 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorator="layout">
+<body>
+	<div layout:fragment="content">
+		<img src="khaleesi.jpg" /> <br />
+		<div th:text="${text}" />
+	</div>
+</body>
+</html>

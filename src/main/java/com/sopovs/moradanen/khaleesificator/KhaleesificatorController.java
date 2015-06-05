@@ -1,12 +1,13 @@
 package com.sopovs.moradanen.khaleesificator;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
+import java.util.Collections;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/")
@@ -17,14 +18,9 @@ public class KhaleesificatorController {
         return "index";
     }
 
-    @RequestMapping(method = POST)
-    public String byInput(@RequestParam String input) {
-        return "index";
+    @RequestMapping(value = "khaleesificate", method = GET)
+    public ModelAndView byInput(@RequestParam String input) {
+        return new ModelAndView("khaleesificator", Collections.singletonMap("text",
+                Khaleesificator.khaleesificate(input)));
     }
-
-    @RequestMapping(value = "u", method = GET)
-    public String byUrl(@PathVariable("url") String url) {
-        return "index";
-    }
-
 }
