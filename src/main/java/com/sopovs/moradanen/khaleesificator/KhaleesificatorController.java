@@ -2,7 +2,8 @@ package com.sopovs.moradanen.khaleesificator;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,10 @@ public class KhaleesificatorController {
 
     @RequestMapping(value = "khaleesificate", method = GET)
     public ModelAndView byInput(@RequestParam String input) {
-        return new ModelAndView("khaleesificator", Collections.singletonMap("text",
-                Khaleesificator.khaleesificate(input)));
+        Map<String, String> args = new HashMap<>();
+        args.put("input", input);
+        args.put("text", Khaleesificator.khaleesificate(input));
+        return new ModelAndView("khaleesificator", args);
     }
+
 }
