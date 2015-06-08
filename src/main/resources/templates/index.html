@@ -4,6 +4,12 @@
 <body>
 	<div layout:fragment="content">
 		<img src="mormont.jpg" /> <br />
+		<h7>Последние кхалисифицированные фразы:</h7>
+		<ul>
+			<li th:each="phrase : ${recent}">
+				<div th:text="${phrase}"></div>
+			</li>
+		</ul>
 	</div>
 </body>
 </html>
