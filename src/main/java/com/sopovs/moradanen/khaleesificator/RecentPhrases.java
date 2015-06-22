@@ -1,45 +1,34 @@
 package com.sopovs.moradanen.khaleesificator;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 
-import org.springframework.beans.factory.DisposableBean;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RecentPhrases implements DisposableBean {
+public class RecentPhrases {
     static final int SIZE = 10;
-    private final ExecutorService offeringService = Executors.newFixedThreadPool(1);
-    private final ConcurrentMap<String, Long> phrases = new ConcurrentHashMap<>();
 
-    @Override
-    public void destroy() {
-        offeringService.shutdownNow();
-    }
+    private final LinkedHashSet<String> phrases = new LinkedHashSet<>();
 
-    public void offer(final String phrase) {
-        offeringService.execute(() -> {
-            phrases.put(phrase, System.currentTimeMillis());
-            while (phrases.size() > SIZE) {
-                long oldestAge = Long.MAX_VALUE;
-                String oldestPhrase = null;
-                for (Entry<String, Long> entry : phrases.entrySet()) {
-                    if (entry.getValue() < oldestAge) {
-                        oldestAge = entry.getValue();
-                        oldestPhrase = entry.getKey();
-                    }
-                }
-                phrases.remove(oldestPhrase);
+    public synchronized void offer(final String phrase) {
+        if (phrases.contains(phrase)) {
+            phrases.remove(phrase);
+            phrases.add(phrase);
+        } else {
+            phrases.add(phrase);
+            if (phrases.size() > SIZE) {
+                Iterator<String> it = phrases.iterator();
+                it.next();
+                it.remove();
             }
-        });
+        }
     }
 
-    public Collection<String> getRecent() {
-        return phrases.keySet();
+    public synchronized Collection<String> getRecent() {
+        return new ArrayList<String>(phrases);
     }
 
 }
